@@ -1,0 +1,5 @@
+{
+  "name": "MERN Blog API - Documentation",
+  "description": "A robust, RESTful blog API built with the MERN stack (MongoDB, Express, Node.js). It includes features like JWT authentication, user email verification, password reset flows, and comprehensive CRUD operations for posts, comments, and categories.",
+  "requestFramePermissions": []
+}

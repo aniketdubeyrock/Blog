@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERN Blog API - Documentation</title>
+    <script type="module" src="./index.tsx"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .endpoint {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .method {
+            font-weight: bold;
+            padding: 0.25em 0.6em;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .method-get {
+            background-color: #28a745;
+        }
+
+        .method-post {
+            background-color: #007bff;
+        }
+
+        .method-put {
+            background-color: #fd7e14;
+        }
+
+        .method-delete {
+            background-color: #dc3545;
+        }
+
+        .path {
+            font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+            font-size: 1.1em;
+            color: #e83e8c;
+        }
+
+        .auth-badge {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .auth-admin {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        code {
+            background-color: #e9ecef;
+            padding: .2em .4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: 3px;
+            font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+        }
+
+        pre {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #f8f9fa;
+            /* Explicitly set light color for visibility on dark background */
+            padding: 0;
+            font-size: inherit;
+            border-radius: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>MERN Blog API - Documentation</h1>
+        <p>Base URL: <code>/api/v1</code></p>
+
+        <!-- AUTH -->
+        <section id="auth">
+            <h2>Authentication</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/register</span></div>
+                <p>Registers a new user and sends a verification email.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "password123"
+}</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/login</span></div>
+                <p>Logs in a verified user. Returns a short-lived access token in the response body and a long-lived
+                    refresh token in a secure, httpOnly cookie.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "email": "test@example.com",
+    "password": "password123"
+}</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/auth/refresh</span></div>
+                <p>Uses the httpOnly refresh token cookie to generate a new access token.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/logout</span></div>
+                <p>Logs out the user by clearing the refresh token from the database and the client's cookie.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/auth/verify-email?token={token}</span></div>
+                <p>Verifies a user's email using the token sent to their inbox.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/resend-verification</span></div>
+                <p>Resends the verification email to an unverified user.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{ "email": "unverified@example.com" }</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/forgot-password</span></div>
+                <p>Sends a password reset link to the user's email.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{ "email": "user@example.com" }</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/auth/reset-password?token={token}</span></div>
+                <p>Resets the user's password using the reset token.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{ "password": "newStrongPassword123" }</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/auth/me</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Gets the profile of the currently logged-in user.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-put">PUT</span> <span
+                        class="path">/auth/me</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Updates the profile of the currently logged-in user.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "bio": "A short bio about me.",
+    "profilePicture": "https://example.com/image.jpg",
+    "socialLinks": { "twitter": "https://twitter.com/user" }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- POSTS -->
+        <section id="posts">
+            <h2>Posts</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/posts</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Creates a new blog post.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "title": "My New Post",
+    "content": "This is the content of the post.",
+    "excerpt": "Short summary of the post.",
+    "coverImage": "https://example.com/image.jpg",
+    "category": "60d0fe4f5311236168a109ca",
+    "tags": ["tag1", "tag2"],
+    "status": "published",
+    "isFeatured": false
+}</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span class="path">/posts</span>
+                </div>
+                <p>Gets a paginated list of all published posts. Supports filtering by <code>?tag=</code> and
+                    <code>?category=</code>.
+                </p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/posts/featured</span></div>
+                <p>Gets a list of featured posts.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/posts/popular</span></div>
+                <p>Gets a list of popular posts (by views/likes).</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/posts/:slug</span></div>
+                <p>Gets a single post by its slug and increments its view count.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-put">PUT</span> <span
+                        class="path">/posts/:postId</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Updates a post. User must be the author or an admin.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "title": "Updated Post Title",
+    "status": "published",
+    "isFeatured": true
+}</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-delete">DELETE</span> <span
+                        class="path">/posts/:postId</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Deletes a post. User must be the author or an admin.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/posts/:postId/like</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Toggles a like on a post for the logged-in user.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/posts/:postId/related</span></div>
+                <p>Gets related posts based on tags.</p>
+            </div>
+        </section>
+
+        <!-- COMMENTS -->
+        <section id="comments">
+            <h2>Comments</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/comments</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Creates a new comment on a post. Can be a top-level comment or a reply.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{
+    "postId": "60d0fe4f5311236168a109ca",
+    "content": "This is a great post!",
+    "parentComment": null 
+    // or "parentComment": "60d0fe4f5311236168a109cb" to reply
+}</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/comments/post/:postId</span></div>
+                <p>Gets all comments for a specific post in a nested structure.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-put">PUT</span> <span
+                        class="path">/comments/:commentId</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Updates a comment. User must be the author.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-delete">DELETE</span> <span
+                        class="path">/comments/:commentId</span> <span class="auth-badge">Auth Required</span></div>
+                <p>Deletes a comment. User must be the author or an admin.</p>
+            </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section id="categories">
+            <h2>Categories</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/categories</span> <span class="auth-badge auth-admin">Admin Only</span></div>
+                <p>Creates a new category.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{ "name": "Technology" }</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/categories</span></div>
+                <p>Gets a list of all categories.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/categories/:slug/posts</span></div>
+                <p>Gets all published posts belonging to a specific category slug.</p>
+            </div>
+        </section>
+
+        <!-- USERS -->
+        <section id="users">
+            <h2>Users</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/users/author/:authorId</span></div>
+                <p>Gets the public profile of an author.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/users/author/:authorId/posts</span></div>
+                <p>Gets all published posts by a specific author.</p>
+            </div>
+        </section>
+
+        <!-- MISC -->
+        <section id="misc">
+            <h2>Misc</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span
+                        class="path">/search?q={query}</span></div>
+                <p>Searches for posts by title and content.</p>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-post">POST</span> <span
+                        class="path">/subscribe</span></div>
+                <p>Subscribes an email to the newsletter.</p>
+                <strong>Request Body:</strong>
+                <pre><code>{ "email": "subscriber@example.com" }</code></pre>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="method method-get">GET</span> <span class="path">/tags</span>
+                </div>
+                <p>Gets a list of all unique tags used in published posts.</p>
+            </div>
+        </section>
+
+    </div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
